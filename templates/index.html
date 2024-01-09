@@ -94,7 +94,6 @@ li {
 </head>
 <body>
     <div>
-
         <h1 align="center">XX电影院购票 - 首页</h1>
         <!-- 在这里插入Jinja2模板语法 -->
         <ul>
@@ -107,19 +106,117 @@ li {
                         <div class="flex-cont">
                             <div class="flex-item c-middle">
                                 <div class="flex-cont flex-nav title">
-                                    <h2>{{ data[1] }}</h2>
+                                    <h2>{{ data[2][1] }}</h2>
                                     <span class="max-ver">2D</span>
                                 </div>
-                                <p>{{ data[5] }}</p>
-                                <span class="info">{{ data[7] }}</span>
+                                <p>{{ data[2][5] }}</p>
+                                <span class="info">{{ data[2][7] }}</span>
                             </div>
                         </div>
                     </div>
                     <div class="c-right">
                         <p>
-                            <label>{{ data2 }}</label>
-                            <span>分</span>
-                            <!---->
+                            <label style="font-size: 20px;">{{ data2[2] }}分</label>
+                        </p>
+                        <button class="btn-bg4 btn-hot">购票</button>
+                    </div>
+                </section>
+            </li>
+            <li>
+                <section class="flex-cont">
+                    <div class="c-left">
+                        <img width="100" src="https://gw.alicdn.com/bao/uploaded/i4/O1CN01uOWgeK1IH8IOiqEFN_!!6000000000867-0-alipicbeacon.jpg" data-spm-anchor-id="a2of6.film_list_page.0.i0">
+                    </div>
+                    <div class="flex-item">
+                        <div class="flex-cont">
+                            <div class="flex-item c-middle">
+                                <div class="flex-cont flex-nav title">
+                                    <h2>{{ data[0][1] }}</h2>
+                                    <span class="max-ver">2D</span>
+                                </div>
+                                <p>{{ data[0][5] }}</p>
+                                <span class="info">{{ data[0][7] }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="c-right">
+                        <p>
+                            <label style="font-size: 20px;">{{ data2[0] }}分</label>
+                        </p>
+                        <button class="btn-bg4 btn-hot">购票</button>
+                    </div>
+                </section>
+            </li>
+            <li>
+                <section class="flex-cont">
+                    <div class="c-left">
+                        <img width="100" src="https://gw.alicdn.com/bao/uploaded/i4/O1CN013yvvHG1ar0PR2n547_!!6000000003382-0-alipicbeacon.jpg" data-spm-anchor-id="a2of6.film_list_page.0.i0">
+                    </div>
+                    <div class="flex-item">
+                        <div class="flex-cont">
+                            <div class="flex-item c-middle">
+                                <div class="flex-cont flex-nav title">
+                                    <h2>{{ data[3][1] }}</h2>
+                                    <span class="max-ver">2D</span>
+                                </div>
+                                <p>{{ data[3][5] }}</p>
+                                <span class="info">{{ data[3][7] }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="c-right">
+                        <p>
+                            <label style="font-size: 20px;">{{ data2[3] }}分</label>
+                        </p>
+                        <button class="btn-bg4 btn-hot">购票</button>
+                    </div>
+                </section>
+            </li>
+            <li>
+                <section class="flex-cont">
+                    <div class="c-left">
+                        <img width="100" src="https://gw.alicdn.com/bao/uploaded/i3/O1CN01bUbIod21bQZ7jxKLX_!!6000000007003-0-alipicbeacon.jpg" data-spm-anchor-id="a2of6.film_list_page.0.i0">
+                    </div>
+                    <div class="flex-item">
+                        <div class="flex-cont">
+                            <div class="flex-item c-middle">
+                                <div class="flex-cont flex-nav title">
+                                    <h2>{{ data[1][1] }}</h2>
+                                    <span class="max-ver">2D</span>
+                                </div>
+                                <p>{{ data[1][5] }}</p>
+                                <span class="info">{{ data[4][7] }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="c-right">
+                        <p>
+                            <label style="font-size: 20px;">{{ data2[1] }}分</label>
+                        </p>
+                        <button class="btn-bg4 btn-hot">购票</button>
+                    </div>
+                </section>
+            </li>
+            <li>
+                <section class="flex-cont">
+                    <div class="c-left">
+                        <img width="100" src="https://gw.alicdn.com/bao/uploaded/i3/O1CN014yiVPx1gteNzAvvHJ_!!6000000004200-0-alipicbeacon.jpg" data-spm-anchor-id="a2of6.film_list_page.0.i0">
+                    </div>
+                    <div class="flex-item">
+                        <div class="flex-cont">
+                            <div class="flex-item c-middle">
+                                <div class="flex-cont flex-nav title">
+                                    <h2>{{ data[4][1] }}</h2>
+                                    <span class="max-ver">2D</span>
+                                </div>
+                                <p>{{ data[4][5] }}</p>
+                                <span class="info">{{ data[4][7] }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="c-right">
+                        <p>
+                            <label style="font-size: 20px;">{{ data2[4] }}分</label>
                         </p>
                         <button class="btn-bg4 btn-hot">购票</button>
                     </div>

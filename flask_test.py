@@ -10,9 +10,12 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     # 示例数据
-    a = find_film()[2]
-    b = douban_rating_num(a[0])
-    print(a)
+    a = find_film()
+    # b = douban_rating_num(a[0])
+    b = list()
+    for x in range(len(a)):
+        b.append(douban_rating_num(a[x][0]))
+    print(b)
     return render_template("index.html", data=a, data2=b)
 
 

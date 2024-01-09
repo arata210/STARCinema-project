@@ -17,6 +17,6 @@ def douban_rating_num(movie_id):
     rating_num = soup.find('div', {'class': 'rating_self'}).find('strong', {'class': 'll rating_num'}).text.strip()
     # 提取评分内容
     if len(rating_num) == 0:
-        rating_num = '暂无评分'
+        rating_num = '暂无'
 
     return rating_num
