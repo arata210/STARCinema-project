@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XX电影院购票 - 首页</title>
+    <style type="text/css">
+        ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    padding: 15px;
+}
+
+.flex-cont {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.c-left img {
+    max-width: 100%;
+    height: auto;
+}
+
+.flex-item {
+    flex-grow: 1;
+    margin-left: 15px;
+}
+
+.c-middle h2 {
+    margin: 0;
+}
+
+.flex-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.title {
+    margin-bottom: 10px;
+}
+
+.max-ver {
+    background-color: #ff9800;
+    color: #fff;
+    padding: 5px;
+    border-radius: 10px;
+    margin-right: auto;
+}
+
+.info {
+    color: #777;
+}
+
+.corner-tips {
+    background-color: #4caf50;
+    color: #fff;
+    padding: 5px;
+    border-radius: 3px;
+}
+
+.c-right p {
+    margin: 0;
+    text-align: center;
+}
+
+.btn-bg4 {
+    background-color: #4caf50;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.btn-hot {
+    background-color: #e74c3c;
+    border-radius: 30px;
+}
+
+.btn-bg4:hover,
+.btn-hot:hover {
+    background-color: #45a049;
+}
+
+    </style>
+</head>
+<body>
+    <div>
+
+        <h1 align="center">XX电影院购票 - 首页</h1>
+        <!-- 在这里插入Jinja2模板语法 -->
+        <ul>
+            <li>
+                <section class="flex-cont">
+                    <div class="c-left">
+                        <img width="100" src="https://gw.alicdn.com/bao/uploaded/i4/O1CN01PtD4AL21zF9OAswzQ_!!6000000007055-0-alipicbeacon.jpg" data-spm-anchor-id="a2of6.film_list_page.0.i0">
+                    </div>
+                    <div class="flex-item">
+                        <div class="flex-cont">
+                            <div class="flex-item c-middle">
+                                <div class="flex-cont flex-nav title">
+                                    <h2>{{ data[1] }}</h2>
+                                    <span class="max-ver">2D</span>
+                                </div>
+                                <p>{{ data[5] }}</p>
+                                <span class="info">{{ data[7] }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="c-right">
+                        <p>
+                            <label>{{ data2 }}</label>
+                            <span>分</span>
+                            <!---->
+                        </p>
+                        <button class="btn-bg4 btn-hot">购票</button>
+                    </div>
+                </section>
+            </li>
+        </ul>
+        <!-- 将Flask传递的数据放入某个框（元素）中 -->
+    </div>
+</body>
+</html>
