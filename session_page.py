@@ -1,8 +1,7 @@
-from connect_dbs import MySQLConn
 from connect_dbs import MongoDBConn
 
 
-def find_film_session_byid(the_movie_id):
+def find_film_session_byMovieId(the_movie_id):
     film_conn = MongoDBConn()
     cinemaDB = film_conn.client['CinemaDB']['session'+the_movie_id]
     return list(cinemaDB.find())

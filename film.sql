@@ -41,26 +41,27 @@ CREATE TABLE amount (
 -- 创建订单表 ticket_order
 CREATE TABLE ticket_order (
     order_id CHAR(20) NOT NULL, -- 订单id
-    uid CHAR(10), -- 用户id
+    phone CHAR(11), -- 手机号
     session_id CHAR(20), -- 场次id
     actual_price DECIMAL(6,2), -- 实际支付金额
     count INT, -- 数量
     seat CHAR(20), -- 座位
     datetime DATETIME, -- 支付时间
     payment CHAR(20), -- 支付方式
+    code CHAR(10), -- 取票码
     PRIMARY KEY (order_id)
 );
 
 -- 创建用户表 user
 CREATE TABLE user (
-    uid CHAR(10) NOT NULL, -- 用户id
+    -- uid CHAR(10) NOT NULL, 用户id
+    phone CHAR(11) NOT NULL, -- 手机号
     pid CHAR(15), -- 参数id
-    name VARCHAR(20), -- 用户名
-    phone CHAR(11), -- 用户手机号
-    type CHAR(6), -- 用户类型
+    -- name VARCHAR(20), 用户名
+    -- type CHAR(6), 用户类型
     balance DECIMAL(6,2), -- 用户余额
-    status BOOL, -- 用户状态
-    PRIMARY KEY (uid)
+    -- status BOOL, -- 用户状态
+    PRIMARY KEY (phone)
 );
 
 -- 创建参数表 parameter
@@ -76,7 +77,6 @@ CREATE TABLE pay_amount (
     original_price DECIMAL(6,2), -- 原始价格
     coupon_amount DECIMAL(6,2), -- 优惠券价格
     parameter_amount DECIMAL(6,2), -- 影城卡价格
-    total_discount_amount DECIMAL(6,2), -- 总优惠价
     actual_price DECIMAL(6,2) NOT NULL, -- 实际支付金额
     order_id CHAR(20), -- 订单id
     PRIMARY KEY (actual_price)
@@ -89,8 +89,8 @@ ALTER TABLE amount ADD CONSTRAINT FK_order_1 FOREIGN KEY (order_id)
 ALTER TABLE amount ADD CONSTRAINT FK_price_2 FOREIGN KEY (actual_price)
       REFERENCES pay_amount (actual_price);
 
-ALTER TABLE ticket_order ADD CONSTRAINT FK_have FOREIGN KEY (uid)
-      REFERENCES user (uid);
+ALTER TABLE ticket_order ADD CONSTRAINT FK_have FOREIGN KEY (phone)
+      REFERENCES user (phone);
 
 ALTER TABLE user ADD CONSTRAINT FK_benefit FOREIGN KEY (pid)
       REFERENCES parameter(pid);
@@ -102,25 +102,25 @@ VALUES
   ('P002', '储值卡', 0.8);
 
 -- 初始化用户表 user
-INSERT INTO user (uid, pid, name, phone, type, balance, status)
+INSERT INTO user (phone, pid, balance)
 VALUES
-    ('1001', NULL, '小明', '13812345678', '普通会员', 0, true),
-    ('1002', 'P001', '小红', '13987654321', 'VIP会员', 0, true),
-    ('1003', 'P002', '小王', '18788886666', 'VIP会员', 176, true);
+    ('13812345678', NULL, 0),
+    ('13987654321', 'P001', 0),
+    ('18788886666', 'P002', 176);
 
 -- 初始化订单表 ticket_order
-INSERT INTO ticket_order (order_id, uid, actual_price, session_id, count, seat, datetime, payment)
+INSERT INTO ticket_order (order_id, phone, actual_price, session_id, count, seat, datetime, payment, code)
 VALUES
-('S0123', '1001', 29, '35725869001', 1, 'A1', '2024-01-05 19:45:00', '支付宝'),
-('S0124', '1002', 25, '35725869001', 1, 'B3', '2024-01-06 15:30:00', '微信'),
-('S0125', '1003', 24, '35725869001', 1, 'C2', '2024-01-07 16:00:00', '储值卡');
+('S0123', '13812345678', 29.00, '35725869001', 1, 'A1', '2024-01-05 19:45:00', '支付宝', '123456'),
+('S0124', '13987654321', 25.00, '35725869001', 1, 'B3', '2024-01-06 15:30:00', '微信', '223344'),
+('S0125', '18788886666', 24.00, '35725869001', 1, 'C2', '2024-01-07 16:00:00', '储值卡', '778855');
 
 -- 初始化金额记录表 pay_amount
-INSERT INTO pay_amount (original_price, coupon_amount, parameter_amount, total_discount_amount, actual_price, order_id)
+INSERT INTO pay_amount (original_price, coupon_amount, parameter_amount, actual_price, order_id)
 VALUES
-   (30.00, 1.00, 0.00, 1.00, 29.00, 'S0123'),
-   (30.00, 0.00, 5.00, 5.00, 25.00, 'S0124'),
-   (30.00, 0.00, 6.00, 6.00, 24.00, 'S0125');
+   (30.00, 1.00, 0.00, 29.00, 'S0123'),
+   (30.00, 0.00, 5.00, 25.00, 'S0124'),
+   (30.00, 0.00, 6.00, 24.00, 'S0125');
 
 -- 初始化过渡表 amount
 INSERT INTO amount (order_id, actual_price)
@@ -141,13 +141,13 @@ SELECT
     a.session_id AS 场次ID,
     a.count AS 购买数量,
     a.seat AS 座位号,
-    a.uid AS 用户ID,
+    a.phone AS 手机号,
     a.actual_price AS 实际支付,
     a.datetime AS 购买时间,
     a.payment AS 支付方式,
+    a.code AS 取票码,
     b.original_price AS 原价,
     b.coupon_amount AS 优惠券,
-    b.parameter_amount AS 影城卡,
-    b.total_discount_amount AS 总优惠
+    b.parameter_amount AS 影城卡
 FROM ticket_order AS a
 JOIN pay_amount AS b ON a.order_id = b.order_id;
