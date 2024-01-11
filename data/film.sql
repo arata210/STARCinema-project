@@ -1,88 +1,88 @@
--- Çå¿ÕÊı¾İ¿â
+-- æ¸…ç©ºæ•°æ®åº“
 drop database cinema;
 
--- ´´½¨cinemaÊı¾İ¿â
+-- åˆ›å»ºcinemaæ•°æ®åº“
 CREATE DATABASE cinema
   CHARACTER SET utf8mb4
   COLLATE utf8mb4_general_ci;
 
--- Ê¹ÓÃÊı¾İ¿â
+-- ä½¿ç”¨æ•°æ®åº“
 use cinema;
 
--- ´´½¨µçÓ°±í film
+-- åˆ›å»ºç”µå½±è¡¨ film
 CREATE TABLE film (
-    movie_id CHAR(10) PRIMARY KEY, -- µçÓ°id
-    title VARCHAR(255), -- ±êÌâ
-    release_date CHAR(10), -- ÉÏÓ³Ê±¼ä
-    country VARCHAR(255), -- ¹ú¼Ò/µØÇø
-    length INT, -- Ê±³¤
-    director VARCHAR(255), -- µ¼Ñİ
-    genre VARCHAR(100), -- ÀàĞÍ
-    actor VARCHAR(255), -- Ö÷ÒªÑİÔ±
-    rating_num CHAR(10) -- ÆÀ·Ö
+    movie_id CHAR(10) PRIMARY KEY, -- ç”µå½±id
+    title VARCHAR(255), -- æ ‡é¢˜
+    release_date CHAR(10), -- ä¸Šæ˜ æ—¶é—´
+    country VARCHAR(255), -- å›½å®¶/åœ°åŒº
+    length INT, -- æ—¶é•¿
+    director VARCHAR(255), -- å¯¼æ¼”
+    genre VARCHAR(100), -- ç±»å‹
+    actor VARCHAR(255), -- ä¸»è¦æ¼”å‘˜
+    rating_num CHAR(10) -- è¯„åˆ†
 );
 
--- ³õÊ¼»¯µçÓ°±í
+-- åˆå§‹åŒ–ç”µå½±è¡¨
 INSERT INTO film (movie_id, title, release_date, country, length, director, genre, actor, rating_num)
 VALUES 
-('35725869', 'Äê»á²»ÄÜÍ££¡', '2023-12-29', 'ÖĞ¹ú´óÂ½', 117, '¶­ÈóÄê', '¾çÇé / Ï²¾ç', '´óÅô / °×¿Í / ×¯´ï·Æ / ÍõÑ¸', '8.2'),
-('35074609', '½ğÊÖÖ¸', '2023-12-30', 'ÖĞ¹úÏã¸Û / ÖĞ¹ú´óÂ½', 125, '×¯ÎÄÇ¿', '¾çÇé / ·¸×ï', 'Áº³¯Î° / ÁõµÂ»ª / ²Ì×¿åû / ÈÎ´ï»ª', '6.4'),
-('35927496', 'Ç±ĞĞ', '2023-12-29', 'ÖĞ¹ú´óÂ½ / ÖĞ¹úÏã¸Û', 114, '¹ØÖÇÒ«', '¾çÇé / ¶¯×÷ / ·¸×ï', 'ÁõµÂ»ª / ÁÖ¼Ò¶° / ÅíÓÚêÌ / ÁõÑÅÉª', '5.9'),
-('35768712', 'Ò»ÉÁÒ»ÉÁÁÁĞÇĞÇ', '2023-12-30', 'ÖĞ¹ú´óÂ½', 107, '³ÂĞ¡Ã÷ / ÕÂÅÊ', '°®Çé / Ææ»Ã', 'Çü³şÏô / ÕÅ¼ÑÄş / ¸µİ¼ / ½¯êÀÁØ', '6.1'),
-('35312439', '»ØÎ÷²Ø', '2024-01-11', 'ÖĞ¹ú´óÂ½', 109, '³Â¹úĞÇ / À­»ª¼Ó', '¾çÇé', 'ËÎÑó / ½ğ°Í / ÌÕº£ / Ë÷ÀÊÍúÄ·', 'ÔİÎŞÆÀ·Ö');
+('35725869', 'å¹´ä¼šä¸èƒ½åœï¼', '2023-12-29', 'ä¸­å›½å¤§é™†', 117, 'è‘£æ¶¦å¹´', 'å‰§æƒ… / å–œå‰§', 'å¤§é¹ / ç™½å®¢ / åº„è¾¾è² / ç‹è¿…', '8.2'),
+('35074609', 'é‡‘æ‰‹æŒ‡', '2023-12-30', 'ä¸­å›½é¦™æ¸¯ / ä¸­å›½å¤§é™†', 125, 'åº„æ–‡å¼º', 'å‰§æƒ… / çŠ¯ç½ª', 'æ¢æœä¼Ÿ / åˆ˜å¾·å / è”¡å“å¦ / ä»»è¾¾å', '6.4'),
+('35927496', 'æ½œè¡Œ', '2023-12-29', 'ä¸­å›½å¤§é™† / ä¸­å›½é¦™æ¸¯', 114, 'å…³æ™ºè€€', 'å‰§æƒ… / åŠ¨ä½œ / çŠ¯ç½ª', 'åˆ˜å¾·å / æ—å®¶æ ‹ / å½­äºæ™ / åˆ˜é›…ç‘Ÿ', '5.9'),
+('35768712', 'ä¸€é—ªä¸€é—ªäº®æ˜Ÿæ˜Ÿ', '2023-12-30', 'ä¸­å›½å¤§é™†', 107, 'é™ˆå°æ˜ / ç« æ”€', 'çˆ±æƒ… / å¥‡å¹»', 'å±ˆæ¥šè§ / å¼ ä½³å® / å‚…è / è’‹æ˜€éœ–', '6.1'),
+('35312439', 'å›è¥¿è—', '2024-01-11', 'ä¸­å›½å¤§é™†', 109, 'é™ˆå›½æ˜Ÿ / æ‹‰ååŠ ', 'å‰§æƒ…', 'å®‹æ´‹ / é‡‘å·´ / é™¶æµ· / ç´¢æœ—æ—ºå§†', 'æš‚æ— è¯„åˆ†');
 
--- ´´½¨¹ı¶É±í amount£¨¶©µ¥ºÍÓÅ»İÁ½ÕÅ±íµÄ¹ı¶É£©
+-- åˆ›å»ºè¿‡æ¸¡è¡¨ amountï¼ˆè®¢å•å’Œä¼˜æƒ ä¸¤å¼ è¡¨çš„è¿‡æ¸¡ï¼‰
 CREATE TABLE amount (
-    order_id CHAR(20) NOT NULL, -- ¶©µ¥id
-    actual_price DECIMAL(6,2) NOT NULL, -- Êµ¼ÊÖ§¸¶½ğ¶î
+    order_id CHAR(20) NOT NULL, -- è®¢å•id
+    actual_price DECIMAL(6,2) NOT NULL, -- å®é™…æ”¯ä»˜é‡‘é¢
     PRIMARY KEY (order_id, actual_price)
 );
 
--- ´´½¨¶©µ¥±í ticket_order
+-- åˆ›å»ºè®¢å•è¡¨ ticket_order
 CREATE TABLE ticket_order (
-    order_id CHAR(20) NOT NULL, -- ¶©µ¥id
-    phone CHAR(11), -- ÊÖ»úºÅ
-    session_id CHAR(20), -- ³¡´Îid
-    actual_price DECIMAL(6,2), -- Êµ¼ÊÖ§¸¶½ğ¶î
-    count INT, -- ÊıÁ¿
-    seat CHAR(20), -- ×ùÎ»
-    datetime DATETIME, -- Ö§¸¶Ê±¼ä
-    payment CHAR(20), -- Ö§¸¶·½Ê½
-    code CHAR(10), -- È¡Æ±Âë
+    order_id CHAR(20) NOT NULL, -- è®¢å•id
+    phone CHAR(11), -- æ‰‹æœºå·
+    session_id CHAR(20), -- åœºæ¬¡id
+    actual_price DECIMAL(6,2), -- å®é™…æ”¯ä»˜é‡‘é¢
+    count INT, -- æ•°é‡
+    seat CHAR(20), -- åº§ä½
+    datetime DATETIME, -- æ”¯ä»˜æ—¶é—´
+    payment CHAR(20), -- æ”¯ä»˜æ–¹å¼
+    code CHAR(10), -- å–ç¥¨ç 
     PRIMARY KEY (order_id)
 );
 
--- ´´½¨ÓÃ»§±í user
+-- åˆ›å»ºç”¨æˆ·è¡¨ user
 CREATE TABLE user (
-    -- uid CHAR(10) NOT NULL, ÓÃ»§id
-    phone CHAR(11) NOT NULL, -- ÊÖ»úºÅ
-    pid CHAR(15), -- ²ÎÊıid
-    -- name VARCHAR(20), ÓÃ»§Ãû
-    -- type CHAR(6), ÓÃ»§ÀàĞÍ
-    balance DECIMAL(6,2), -- ÓÃ»§Óà¶î
-    -- status BOOL, -- ÓÃ»§×´Ì¬
+    -- uid CHAR(10) NOT NULL, ç”¨æˆ·id
+    phone CHAR(11) NOT NULL, -- æ‰‹æœºå·
+    pid CHAR(15), -- å‚æ•°id
+    -- name VARCHAR(20), ç”¨æˆ·å
+    -- type CHAR(6), ç”¨æˆ·ç±»å‹
+    balance DECIMAL(6,2), -- ç”¨æˆ·ä½™é¢
+    -- status BOOL, -- ç”¨æˆ·çŠ¶æ€
     PRIMARY KEY (phone)
 );
 
--- ´´½¨²ÎÊı±í parameter
+-- åˆ›å»ºå‚æ•°è¡¨ parameter
 CREATE TABLE parameter (
-    pid CHAR(15) NOT NULL, -- ²ÎÊıid
-    pname CHAR(20), -- ²ÎÊıÃû
-    pvalue FLOAT(10), -- ÕÛ¿ÛÊı
+    pid CHAR(15) NOT NULL, -- å‚æ•°id
+    pname CHAR(20), -- å‚æ•°å
+    pvalue FLOAT(10), -- æŠ˜æ‰£æ•°
     PRIMARY KEY (pid)
 );
 
--- ´´½¨½ğ¶î¼ÇÂ¼±í pay_amount
+-- åˆ›å»ºé‡‘é¢è®°å½•è¡¨ pay_amount
 CREATE TABLE pay_amount (
-    original_price DECIMAL(6,2), -- Ô­Ê¼¼Û¸ñ
-    coupon_amount DECIMAL(6,2), -- ÓÅ»İÈ¯¼Û¸ñ
-    parameter_amount DECIMAL(6,2), -- Ó°³Ç¿¨¼Û¸ñ
-    actual_price DECIMAL(6,2) NOT NULL, -- Êµ¼ÊÖ§¸¶½ğ¶î
-    order_id CHAR(20), -- ¶©µ¥id
+    original_price DECIMAL(6,2), -- åŸå§‹ä»·æ ¼
+    coupon_amount DECIMAL(6,2), -- ä¼˜æƒ åˆ¸ä»·æ ¼
+    parameter_amount DECIMAL(6,2), -- å½±åŸå¡ä»·æ ¼
+    actual_price DECIMAL(6,2) NOT NULL, -- å®é™…æ”¯ä»˜é‡‘é¢
+    order_id CHAR(20), -- è®¢å•id
     PRIMARY KEY (actual_price)
 );
 
--- ´´½¨Íâ¼üÔ¼Êø
+-- åˆ›å»ºå¤–é”®çº¦æŸ
 ALTER TABLE amount ADD CONSTRAINT FK_order_1 FOREIGN KEY (order_id)
       REFERENCES ticket_order (order_id);
 
@@ -95,59 +95,61 @@ ALTER TABLE ticket_order ADD CONSTRAINT FK_have FOREIGN KEY (phone)
 ALTER TABLE user ADD CONSTRAINT FK_benefit FOREIGN KEY (pid)
       REFERENCES parameter(pid);
 
--- ³õÊ¼»¯²ÎÊı±í parameter
+-- åˆå§‹åŒ–å‚æ•°è¡¨ parameter
 INSERT INTO parameter (pid, pname, pvalue)
 VALUES
-  ('P001', 'ÔÂ·Ñ¿¨', -5),
-  ('P002', '´¢Öµ¿¨', 0.8);
+  ('P001', 'æœˆè´¹å¡', -5),
+  ('P002', 'å‚¨å€¼å¡', 0.8);
 
--- ³õÊ¼»¯ÓÃ»§±í user
+-- åˆå§‹åŒ–ç”¨æˆ·è¡¨ user
 INSERT INTO user (phone, pid, balance)
 VALUES
     ('13812345678', NULL, 0),
     ('13987654321', 'P001', 0),
     ('18788886666', 'P002', 176);
 
--- ³õÊ¼»¯¶©µ¥±í ticket_order
+-- åˆå§‹åŒ–è®¢å•è¡¨ ticket_order
 INSERT INTO ticket_order (order_id, phone, actual_price, session_id, count, seat, datetime, payment, code)
 VALUES
-('S0123', '13812345678', 29.00, '35725869001', 1, 'A1', '2024-01-05 19:45:00', 'Ö§¸¶±¦', '123456'),
-('S0124', '13987654321', 25.00, '35725869001', 1, 'B3', '2024-01-06 15:30:00', 'Î¢ĞÅ', '223344'),
-('S0125', '18788886666', 24.00, '35725869001', 1, 'C2', '2024-01-07 16:00:00', '´¢Öµ¿¨', '778855');
+('S0123', '13812345678', 29.00, '35725869001', 1, 'A1', '2024-01-05 19:45:00', 'æ”¯ä»˜å®', '123456'),
+('S0124', '13987654321', 25.00, '35725869001', 1, 'B3', '2024-01-06 15:30:00', 'å¾®ä¿¡', '223344'),
+('S0125', '18788886666', 24.00, '35725869001', 1, 'C2', '2024-01-07 16:00:00', 'å‚¨å€¼å¡', '778855');
 
--- ³õÊ¼»¯½ğ¶î¼ÇÂ¼±í pay_amount
+-- åˆå§‹åŒ–é‡‘é¢è®°å½•è¡¨ pay_amount
 INSERT INTO pay_amount (original_price, coupon_amount, parameter_amount, actual_price, order_id)
 VALUES
    (30.00, 1.00, 0.00, 29.00, 'S0123'),
    (30.00, 0.00, 5.00, 25.00, 'S0124'),
    (30.00, 0.00, 6.00, 24.00, 'S0125');
 
--- ³õÊ¼»¯¹ı¶É±í amount
+-- åˆå§‹åŒ–è¿‡æ¸¡è¡¨ amount
 INSERT INTO amount (order_id, actual_price)
 VALUES
     ('S0123', 29.00),
     ('S0124', 25.00),
     ('S0125', 24.00);
 
--- ²éÑ¯ÓÃ»§±í
+-- æŸ¥è¯¢ç”¨æˆ·è¡¨
 SELECT * FROM user;
 
--- ²éÑ¯µçÓ°±í
+-- æŸ¥è¯¢ç”µå½±è¡¨
 SELECT * FROM film;
 
--- ²éÑ¯¶©µ¥ºÍ½ğ¶î¼ÇÂ¼±íµÄ²¢¼¯
+-- æŸ¥è¯¢è®¢å•å’Œé‡‘é¢è®°å½•è¡¨çš„å¹¶é›†
 SELECT
-    a.order_id AS ¶©µ¥ºÅ,
-    a.session_id AS ³¡´ÎID,
-    a.count AS ¹ºÂòÊıÁ¿,
-    a.seat AS ×ùÎ»ºÅ,
-    a.phone AS ÊÖ»úºÅ,
-    a.actual_price AS Êµ¼ÊÖ§¸¶,
-    a.datetime AS ¹ºÂòÊ±¼ä,
-    a.payment AS Ö§¸¶·½Ê½,
-    a.code AS È¡Æ±Âë,
-    b.original_price AS Ô­¼Û,
-    b.coupon_amount AS ÓÅ»İÈ¯,
-    b.parameter_amount AS Ó°³Ç¿¨
+    a.order_id AS è®¢å•å·,
+    a.session_id AS åœºæ¬¡ID,
+    a.count AS è´­ä¹°æ•°é‡,
+    a.seat AS åº§ä½å·,
+    a.phone AS æ‰‹æœºå·,
+    a.actual_price AS å®é™…æ”¯ä»˜,
+    a.datetime AS è´­ä¹°æ—¶é—´,
+    a.payment AS æ”¯ä»˜æ–¹å¼,
+    a.code AS å–ç¥¨ç ,
+    b.original_price AS åŸä»·,
+    b.coupon_amount AS ä¼˜æƒ åˆ¸,
+    b.parameter_amount AS å½±åŸå¡
 FROM ticket_order AS a
 JOIN pay_amount AS b ON a.order_id = b.order_id;
+
+insert phone into user value 13777777777
