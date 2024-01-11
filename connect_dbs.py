@@ -19,21 +19,10 @@ class MongoDBConn:
         for document in documents:
             return int(document["_id"]) + 1
 
-
     def getColl(self):
         cinemadb = self.client["CinemaDB"]
         collections = cinemadb.list_collection_names()
         print(collections)
-
-    def findById(self, film_id):
-        cinemadb = self.client["CinemaDB"]
-        film = cinemadb["films"]
-        return film.find_one({"movie_id": film_id})
-
-    def findAll(self):
-        cinemadb = self.client["CinemaDB"]
-        film = cinemadb["films"]
-        return list(film.find())
 
     def delById(self, film_id):
         cinemadb = self.client["CinemaDB"]
@@ -44,8 +33,6 @@ class MongoDBConn:
         else:
             return f"未找到电影，movie_id: {film_id}"
 
-
-
     def updateFilm(self, movie_id, movie_intro):
         cinemadb = self.client["CinemaDB"]
         film = cinemadb["films"]
@@ -54,11 +41,6 @@ class MongoDBConn:
             return "更新成功！"
         except Exception as e:
             return f"更新失败，发生错误：{e}"
-
-    def filmName(self, film_id):
-        cinemadb = self.client["CinemaDB"]
-        film = cinemadb["films"]
-        return film.find_one({"movie_id": film_id})["move_name"]
 
     # 场次
 
@@ -87,19 +69,6 @@ class MongoDBConn:
             return "插入成功！"
         except Exception as e:
             return f"插入失败，发生错误：{e}"
-
-    def findSession(self, film_id):
-        cinemadb = self.client["CinemaDB"]
-        col = "session" + self.filmName(film_id)
-        session = cinemadb[col]
-        return  session.find_one({"movie_id": film_id})
-
-    def findSessionById(self, film_id, session_id):
-        cinemadb = self.client["CinemaDB"]
-        col = "session" + self.filmName(film_id)
-        session = cinemadb[col]
-        return session.find_one({"_id": session_id})
-
 
 
 class RedisConn:

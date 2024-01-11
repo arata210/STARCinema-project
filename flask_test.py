@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 
-from create_coupon import Get_all_info
+# from create_coupon import Get_all_info
 from index_page import find_films_info, update_films_rating_num, find_films_intro, make_html_li
 from info_page import find_film_info_byid, find_film_intro_byid
 from session_page import find_film_session_byMovieId, find_film_cover_byid, make_html_li_2
