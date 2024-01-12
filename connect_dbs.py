@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 from pymongo import MongoClient
 from redis import Redis
 import mysql.connector
@@ -22,7 +24,7 @@ class MongoDBConn:
     def getColl(self):
         cinemadb = self.client["CinemaDB"]
         collections = cinemadb.list_collection_names()
-        print(collections)
+        return collections
 
     def delById(self, film_id):
         cinemadb = self.client["CinemaDB"]

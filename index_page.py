@@ -10,7 +10,7 @@ def douban_rating_num(movie_id):
     :param movie_id: 电影ID
     :return: 评分
     """
-    # 设置请求标题
+    # 设置请求标头
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',}
     # 获取请求内容
     response = requests.get('https://movie.douban.com/subject/' + movie_id, headers=headers)
@@ -85,8 +85,26 @@ def make_html_li(mcover, mid, mtitle, mdirector, mactor, mrating):
     :return:
     """
     info = """
-    <li><section class="flex-cont"><div class="c-left"><img width="100" src="mcover"></div><div class="flex-item" onclick="window.location.href='/info.html?movie_id=mid';"><div class="flex-cont"><div class="flex-item c-middle"><div class="flex-cont flex-nav title"><h2>mtitle</h2><span class="max-ver">2D</span></div><p>mdirector</p><span class="info">mactor</span></div></div></div><div class="c-right"><p><label style="font-size: 16px;">mrating</label></p><button class="btn-bg4 btn-hot" onclick="window.location.href='/session.html?movie_id=mid';">购票</button></div></section></li>
+    <li><section class="flex-cont"><div class="c-left"><img width="100" src="mcover"></div>
+    <div class="flex-item" onclick="window.location.href='/info.html?movie_id=mid';">
+    <div class="flex-cont"><div class="flex-item c-middle"><div class="flex-cont flex-nav title">
+    <h2>mtitle</h2><span class="max-ver">2D</span></div><p>mdirector</p><span class="info">mactor</span></div></div></div>
+    <div class="c-right"><p><label style="font-size: 16px;">mrating</label></p>
+    <button class="btn-bg4 btn-hot" onclick="window.location.href='/session.html?movie_id=mid';">购票</button>
+    </div></section></li>
     """
-    return info.replace('mcover', mcover).replace('mid', mid).replace('mtitle', mtitle).replace('mdirector',
-                                                                                                mdirector).replace(
-        'mactor', mactor).replace('mrating', mrating)
+    return info.replace('mcover', mcover).replace('mid',
+        mid).replace('mtitle', mtitle).replace('mdirector',mdirector).replace('mactor',
+                                                                mactor).replace('mrating', mrating)
+
+
+def return_html_li(films_info, films_cover):
+    # 双重循环 制作显示的信息
+    film_index = str()
+    for i in range(len(films_info)):
+        for j in range(len(films_cover)):
+            if films_info[i][0] == films_cover[j]['movie_id']:
+                film_index = film_index + (
+                    make_html_li(films_cover[j]['movie_cover'], films_info[i][0], films_info[i][1], films_info[i][5],
+                                 films_info[i][-2], films_info[i][-1]))
+    return film_index

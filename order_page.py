@@ -7,7 +7,6 @@ def find_film_session_byOrderId(the_order_id):
     cinemaDB = film_conn.client['CinemaDB']['session'+the_order_id[0:-3]]
     return cinemaDB.find_one({"_id": int(the_order_id[-3:])})
 
-print(find_film_session_byOrderId('S0123'))
 
 def find_order_byid(the_order_id):
     """
@@ -27,8 +26,3 @@ def find_pay_amount_byid(the_order_id):
     result = film_info.execute_query(query, (the_order_id,))
     film_info.close_conn()
     return result
-
-
-# 影城卡
-# 优惠券
-

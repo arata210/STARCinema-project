@@ -4,8 +4,8 @@ import uuid
 import json
 from datetime import datetime
 
+from login_page import user_register
 from connect_dbs import RedisConn, MongoDBConn, MySQLConn
-from decimal import Decimal, getcontext
 
 
 coupon = RedisConn()
@@ -97,10 +97,8 @@ def Change_state(coupon_id, coupon_state):
 def coupon_order_id():
     # 获取最后id+1位
     last_id = Last_order_id() + 1
-    print(last_id)
     # 订单ID以S开头
     order_id = 'S' + str(last_id).zfill(4)
-    print(order_id)
     # 加入数据库
     coupon.conn.zadd('film:order_id', {order_id: last_id})
     return order_id
@@ -120,7 +118,6 @@ def buy_coupons(number, phone):
         print(phone, ':库存不足')
     else:
         # 获取指定数量优惠券，更改优惠券状态为1，并生成订单
-        print(phone, "实际购买", number, "张")
         for x in range(number):
             coupon_set.add(coupon.conn.spop('film:coupons'))
         if coupon_set:
@@ -129,9 +126,8 @@ def buy_coupons(number, phone):
         for coupon_id in coupon_set:
             Change_state(coupon_id, 1)
             # print(new_dict)
-
-            print(f"{phone}:{coupon_id}，{Get_info(coupon_id)['name']}至【优惠券】兑换")
-
+            # print(f"{phone}:{coupon_id}，{Get_info(coupon_id)['name']}至【优惠券】兑换")
+            return coupon_id
     # except Exception as e:
     #     print(phone, ':优惠券售空')
 
@@ -139,60 +135,56 @@ def buy_coupons(number, phone):
 # buy_coupons(2, "13812345478")
 
 
-def ticket_order(the_movie_id, the_session, the_phone, the_coupon, the_count, the_seat):
-    getcontext().prec = 10
+def ticket_order(the_movie_id, the_session, the_phone, the_seat, the_count=1, the_coupon=''):
     sqldb = MySQLConn()
     film_conn = MongoDBConn()
     q1 = "select pid from user where phone=%s"
     parameter = sqldb.execute_query(q1, (the_phone,))
-    if parameter[0][0] is None:
-        p_value = 1
-    else:
-        q2 = "select pvalue from parameter where pid=%s"
-        p_value = sqldb.execute_query(q2, (parameter[0][0],))
-    print(p_value)
-    if p_value is None:
-        p_value = 1
+    q2 = "select pvalue from parameter where pid=%s"
+    p_value = sqldb.execute_query(q2, (parameter[0][0],))[0][0]
+
     the_session_id = the_movie_id+str(the_session).zfill(3)
-    price = film_conn.client["CinemaDB"]["session"+the_movie_id].find_one({"movie_id": the_movie_id})['price']
-    price = Decimal(price)
-    print(price)
+    price = float(film_conn.client["CinemaDB"]["session"+the_movie_id].find_one({"movie_id": the_movie_id})['price']) * the_count
 
-    coupon_discount = Get_info(the_coupon)['discount']
-    coupon_discount = Decimal(float(coupon_discount))
-    print(coupon_discount, type(coupon_discount))
-
-    if coupon_discount < (Decimal(0.00)):
-        coupon_price = price - price * coupon_discount
-        print(coupon_price, type(coupon_price))
-        parameter_price = price - price * coupon_discount * p_value - coupon_price
-        print(parameter_price)
-        actual_price = price * coupon_discount * parameter_price
-        print(actual_price)
+    if len(the_coupon) == 0:
+        coupon_discount = 1
     else:
-        coupon_price = coupon_discount
-        print(coupon_price)
-        actual_price = (price - coupon_discount) * p_value
-        print(actual_price)
-        parameter_price = price - actual_price - coupon_price
-        print(parameter_price)
+        coupon_discount = Get_info(the_coupon)['discount']
+
+    if coupon_discount > 0:
+        coupon_price = price - price * coupon_discount
+        if p_value > 0:
+            actual_price = (price - coupon_price) * p_value
+            parameter_price = price - actual_price - coupon_price
+        else:
+            parameter_price = - p_value
+            actual_price = price - coupon_price + p_value
+    else:
+        coupon_price = - coupon_discount
+        if p_value > 0:
+            actual_price = (price - coupon_price) * p_value
+            parameter_price = price - actual_price - coupon_price
+        else:
+            parameter_price = - p_value
+            actual_price = price - coupon_price + p_value
 
     order_id = 'S' + str(int(time.time()))
     q3 = "INSERT INTO ticket_order (order_id, phone, session_id, actual_price, count, seat, datetime, payment, code) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
     the_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     code = str(random.randint(1000, 9999)) + str(int(time.time()))[-4:]
     d3 = (order_id, the_phone, the_session_id, actual_price, the_count, the_seat, the_time, '在线支付', code)
-    result = sqldb.execute_insert(q3, d3)
+    print(sqldb.execute_insert(q3, d3))
 
     q4 = "INSERT INTO pay_amount (original_price, coupon_amount, parameter_amount, actual_price, order_id) VALUES (%s, %s, %s, %s, %s)"
     d4 = (price, coupon_price, parameter_price, actual_price, order_id)
-    sqldb.execute_insert(q4, d4)
+    print(sqldb.execute_insert(q4, d4))
 
     q5 = "INSERT INTO amount (order_id, actual_price) VALUES (%s, %s)"
     d5 = (order_id, actual_price)
     sqldb.execute_insert(q5, d5)
     sqldb.close_conn()
-    return result
+    return order_id
 
 
-print(ticket_order('35725869', '3', '13812345678', 'MfI0081b231a60c', 1, 'D3'))
+# print(ticket_order('35725869', '3',
+#                    '13812342278','D排3座, D排1座', 1))

@@ -1,17 +1,20 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify, redirect
 
-# from create_coupon import Get_all_info
-from index_page import find_films_info, update_films_rating_num, find_films_intro, make_html_li
+from seat import random_seat, create_seat_all
+from index_page import find_films_info, update_films_rating_num, find_films_intro, return_html_li
 from info_page import find_film_info_byid, find_film_intro_byid
 from session_page import find_film_session_byMovieId, find_film_cover_byid, make_html_li_2
+from login_page import Login_code, Login_code_check, user_register, user_del
 from order_page import find_film_session_byOrderId, find_order_byid, find_pay_amount_byid
+from ticket_page import buy_coupons, ticket_order
 
 # 设置静态元素存放路径和名字
 app = Flask(__name__, static_url_path='/static', static_folder='static')
 
 
 # 启动前更新电影评分
-# update_films_rating_num()
+update_films_rating_num()
+create_seat_all()
 
 
 @app.route('/')
@@ -27,14 +30,8 @@ def index():
     films_info = find_films_info()
     # 获取电影图片信息
     films_cover = find_films_intro()
-    # 双重循环 制作显示的信息
-    film_index = str()
-    for i in range(len(films_info)):
-        for j in range(len(films_cover)):
-            if films_info[i][0] == films_cover[j]['movie_id']:
-                film_index = film_index + (
-                    make_html_li(films_cover[j]['movie_cover'], films_info[i][0], films_info[i][1], films_info[i][5],
-                                 films_info[i][-2], films_info[i][-1]))
+    # 获取页面信息
+    film_index = return_html_li(films_info, films_cover)
     # 发送数据
     return render_template("index.html", data=film_index)
 
@@ -48,15 +45,7 @@ def info():
     # 接收movie_id
     the_movie_id = request.args.get('movie_id')
     # 获取MySQL数据
-    film_info = find_film_info_byid(the_movie_id)[0]
-    title = film_info[1]
-    release = film_info[2]
-    country = film_info[3]
-    movie_length = film_info[4]
-    director = film_info[5]
-    genre = film_info[6]
-    actor = film_info[7]
-    rating_num = film_info[8]
+    movie_id, title, release, country, movie_length, director, genre, actor, rating_num = find_film_info_byid(the_movie_id)[0]
     # 获取MongoDB数据
     film_intro = find_film_intro_byid(the_movie_id)
     movie_intro = film_intro['movie_intro']
@@ -89,22 +78,53 @@ def session():
     return render_template('session.html', sessions=sessions, cover=cover, title=title, rating=rating)
 
 
-@app.route('/login.html', methods=['GET'])
+@app.route('/login.html', methods=['POST', 'GET'])
 def login():
-    data = '1'
-    return render_template('login.html', data=data)
+    the_movie_id = request.args.get('movie_id')
+    the_session_id = request.args.get('session')
+    data = '输入手机号获取验证码'
+    return render_template('login.html', data=data, mid=the_movie_id, sid=the_session_id)
+
+
+@app.route('/get-login-code', methods=['GET'])
+def get_login_code():
+    try:
+        login_phone = request.args.get('phone')
+        code = Login_code(login_phone)
+        response_data = {"message": f"{code}"}
+        return jsonify(response_data)
+    except Exception as e:
+        print(f"Exception: {e}")
+        return jsonify({"error": "Internal Server Error"}), 500
+
+
+@app.route('/check-login-code', methods=['GET'])
+def check_login_code():
+    the_phone = request.args.get('phone')
+    the_code = request.args.get('code')
+    if Login_code_check(the_phone, the_code):
+        return 'success'
+    else:
+        return 'fail'
 
 
 @app.route('/ticket.html', methods=['GET'])
 def ticket():
-    data = '1'
     the_movie_id = request.args.get('movie_id')
     the_session = request.args.get('session')
     the_phone = request.args.get('phone')
-
-    film_info = find_film_info_byid(the_movie_id)[0]
-
-    return render_template('ticket.html', data=data)
+    the_code = request.args.get('code')
+    user_register(the_phone)
+    if Login_code_check(the_phone, the_code):
+        seat = random_seat(f'film:session{the_movie_id}:{the_session}')
+        if seat is False:
+            return render_template('ticket.html', data='本场已满座，请选择其他场次', type='session', url=the_movie_id, name='movie_id', data2='点我返回排片页')
+        else:
+            order_id = ticket_order(the_movie_id, the_session, the_phone, seat, 1, buy_coupons(1, the_phone))
+            return render_template('ticket.html', data='下单成功，', type='order', url=order_id, name='order_id', data2='点我进入订单页，查看取票码')
+    else:
+        user_del(the_phone)
+        return redirect('/')
 
 
 @app.route('/order.html', methods=['GET'])
@@ -114,12 +134,12 @@ def order():
     phone = order_info[1][: 3] + '*' * 4 + order_info[1][-4:]
     actual_price = f"{order_info[3]}"
     count = order_info[4]
-    seat_1 = order_info[5][0]
-    seat_2 = order_info[5][1]
+    seat = order_info[5]
     pay_time = order_info[6].strftime("%Y-%m-%d %H:%M:%S")
     payment = order_info[7]
     code = order_info[8]
     pay_info = find_pay_amount_byid(the_order_id)[0]
+    price = f"{pay_info[0]}"
     coupon = f"{pay_info[1]}"
     parameter = f"{pay_info[2]}"
     session_id = order_info[2]
@@ -128,7 +148,6 @@ def order():
     start_time = sessions['start_time']
     language = sessions['language']
     movie_type = sessions['type']
-    price = sessions['price']
     finish_time = sessions['finish_time']
     hall = sessions['hall']
     movie_id = sessions['movie_id']
@@ -138,8 +157,7 @@ def order():
     return render_template('order.html', the_order_id=the_order_id, date=date, start_time=start_time, language=language,
                            movie_type=movie_type, price=price,
                            finish_time=finish_time, hall=hall, cover=cover, title=title, phone=phone, actual_price=actual_price,
-                           seat_1=seat_1,
-                           seat_2=seat_2, pay_time=pay_time, payment=payment, code=code, coupon=coupon,
+                           seat=seat, pay_time=pay_time, payment=payment, code=code, coupon=coupon,
                            parameter=parameter, count=count)
 
 
