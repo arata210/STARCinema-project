@@ -1,7 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-from connect_dbs import MySQLConn
-from connect_dbs import MongoDBConn
+from connect_dbs import MySQLConn, MongoDBConn, RedisConn
 
 
 def douban_rating_num(movie_id):
@@ -108,3 +107,28 @@ def return_html_li(films_info, films_cover):
                     make_html_li(films_cover[j]['movie_cover'], films_info[i][0], films_info[i][1], films_info[i][5],
                                  films_info[i][-2], films_info[i][-1]))
     return film_index
+
+
+address = RedisConn()
+
+
+def address_add():
+    address.conn.geoadd("film:cinema:address", (121.480248, 31.236276, "上海市"))
+    address.conn.geoadd("film:cinema:address", (121.658149, 31.270235, "STARCinema(二工大店)"))
+    address.conn.geoadd("film:cinema:address", (121.663077, 31.27215, "顾唐路(地铁站)"))
+    address.conn.geoadd("film:cinema:address", (121.656852, 31.270897, "金海路金丰路(公交站)"))
+
+
+def address_distance_sh():
+    distance_sh = address.conn.geodist('film:cinema:address', '上海市', 'STARCinema(二工大店)', unit='km')
+    return distance_sh
+
+
+def address_distance_near_by():
+    near_by = address.conn.georadiusbymember("film:cinema:address", "STARCinema(二工大店)", 1, unit='km')
+    near_by.remove("STARCinema(二工大店)")
+    near_by_list = list()
+    for x in near_by:
+        distance = address.conn.geodist("film:cinema:address", "STARCinema(二工大店)", x, unit='m')
+        near_by_list.append(f'{x}约有{int(distance)}米')
+    return near_by_list

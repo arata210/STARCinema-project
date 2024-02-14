@@ -179,11 +179,10 @@ def ticket_order(the_movie_id, the_session, the_phone, the_seat, the_count=1, th
     d4 = (price, coupon_price, parameter_price, actual_price, order_id)
     print(sqldb.execute_insert(q4, d4))
 
-    q5 = "INSERT INTO amount (order_id, actual_price) VALUES (%s, %s)"
-    d5 = (order_id, actual_price)
-    sqldb.execute_insert(q5, d5)
     sqldb.close_conn()
     return order_id
+
+
 
 
 # print(ticket_order('35725869', '3',

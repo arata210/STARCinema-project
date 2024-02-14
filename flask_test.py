@@ -1,7 +1,8 @@
 from flask import Flask, render_template, request, jsonify, redirect
 
 from seat import random_seat, create_seat_all
-from index_page import find_films_info, update_films_rating_num, find_films_intro, return_html_li
+from index_page import find_films_info, update_films_rating_num, find_films_intro, return_html_li, address_distance_sh, \
+    address_add, address_distance_near_by
 from info_page import find_film_info_byid, find_film_intro_byid
 from session_page import find_film_session_byMovieId, find_film_cover_byid, make_html_li_2
 from login_page import Login_code, Login_code_check, user_register, user_del
@@ -15,6 +16,7 @@ app = Flask(__name__, static_url_path='/static', static_folder='static')
 # 启动前更新电影评分
 update_films_rating_num()
 create_seat_all()
+address_add()
 
 
 @app.route('/')
@@ -32,8 +34,10 @@ def index():
     films_cover = find_films_intro()
     # 获取页面信息
     film_index = return_html_li(films_info, films_cover)
+    address = round(address_distance_sh(), 2)
+    near_by = address_distance_near_by()
     # 发送数据
-    return render_template("index.html", data=film_index)
+    return render_template("index.html", data=film_index, address=address, near_by=near_by)
 
 
 @app.route('/info.html', methods=['GET'])

@@ -31,13 +31,6 @@ VALUES
 ('35768712', '一闪一闪亮星星', '2023-12-30', '中国大陆', 107, '陈小明 / 章攀', '爱情 / 奇幻', '屈楚萧 / 张佳宁 / 傅菁 / 蒋昀霖', '6.1'),
 ('35312439', '回西藏', '2024-01-11', '中国大陆', 109, '陈国星 / 拉华加', '剧情', '宋洋 / 金巴 / 陶海 / 索朗旺姆', '暂无评分');
 
--- 创建过渡表 amount（订单和优惠两张表的过渡）
-CREATE TABLE amount (
-    order_id CHAR(20) NOT NULL, -- 订单id
-    actual_price DECIMAL(6,2) NOT NULL, -- 实际支付金额
-    PRIMARY KEY (order_id, actual_price)
-);
-
 -- 创建订单表 ticket_order
 CREATE TABLE ticket_order (
     order_id CHAR(20) NOT NULL, -- 订单id
@@ -77,17 +70,14 @@ CREATE TABLE pay_amount (
     original_price DECIMAL(6,2), -- 原始价格
     coupon_amount DECIMAL(6,2), -- 优惠券价格
     parameter_amount DECIMAL(6,2), -- 影城卡价格
-    actual_price DECIMAL(6,2) NOT NULL, -- 实际支付金额
+    actual_price DECIMAL(6,2), -- 实际支付金额
     order_id CHAR(20), -- 订单id
-    PRIMARY KEY (actual_price)
+    PRIMARY KEY (order_id)
 );
 
 -- 创建外键约束
-ALTER TABLE amount ADD CONSTRAINT FK_order_1 FOREIGN KEY (order_id)
+ALTER TABLE pay_amount ADD CONSTRAINT FK_order FOREIGN KEY (order_id)
       REFERENCES ticket_order (order_id);
-
-ALTER TABLE amount ADD CONSTRAINT FK_price_2 FOREIGN KEY (actual_price)
-      REFERENCES pay_amount (actual_price);
 
 ALTER TABLE ticket_order ADD CONSTRAINT FK_have FOREIGN KEY (phone)
       REFERENCES user (phone);
@@ -98,22 +88,23 @@ ALTER TABLE user ADD CONSTRAINT FK_benefit FOREIGN KEY (pid)
 -- 初始化参数表 parameter
 INSERT INTO parameter (pid, pname, pvalue)
 VALUES
+  ('P000', '普通卡', 1),
   ('P001', '月费卡', -5),
   ('P002', '储值卡', 0.8);
 
 -- 初始化用户表 user
 INSERT INTO user (phone, pid, balance)
 VALUES
-    ('13812345678', NULL, 0),
+    ('13812345678', 'P000', 0),
     ('13987654321', 'P001', 0),
     ('18788886666', 'P002', 176);
 
 -- 初始化订单表 ticket_order
 INSERT INTO ticket_order (order_id, phone, actual_price, session_id, count, seat, datetime, payment, code)
 VALUES
-('S0123', '13812345678', 29.00, '35725869001', 1, 'A1', '2024-01-05 19:45:00', '支付宝', '123456'),
-('S0124', '13987654321', 25.00, '35725869001', 1, 'B3', '2024-01-06 15:30:00', '微信', '223344'),
-('S0125', '18788886666', 24.00, '35725869001', 1, 'C2', '2024-01-07 16:00:00', '储值卡', '778855');
+('S0123', '13812345678', 29.00, '35725869001', 1, 'Z排1座', '2024-01-05 19:45:00', '支付宝', '123456'),
+('S0124', '13987654321', 25.00, '35725869001', 1, 'Z排2座', '2024-01-06 15:30:00', '微信', '223344'),
+('S0125', '18788886666', 24.00, '35725869001', 1, 'Z排3座', '2024-01-07 16:00:00', '储值卡', '778855');
 
 -- 初始化金额记录表 pay_amount
 INSERT INTO pay_amount (original_price, coupon_amount, parameter_amount, actual_price, order_id)
@@ -121,13 +112,6 @@ VALUES
    (30.00, 1.00, 0.00, 29.00, 'S0123'),
    (30.00, 0.00, 5.00, 25.00, 'S0124'),
    (30.00, 0.00, 6.00, 24.00, 'S0125');
-
--- 初始化过渡表 amount
-INSERT INTO amount (order_id, actual_price)
-VALUES
-    ('S0123', 29.00),
-    ('S0124', 25.00),
-    ('S0125', 24.00);
 
 -- 查询用户表
 SELECT * FROM user;
